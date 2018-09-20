@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using ProyectoX.Models;
 
 namespace ProyectoX.Controllers
 {
     public class CheckingAccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: CheckingAccount
         public ActionResult Index()
         {
@@ -18,13 +21,22 @@ namespace ProyectoX.Controllers
         // GET: CheckingAccount/Details
         public ActionResult Details()
         {
-            var checkingAccount = new CheckingAccount()
-            { AccountNumber = "000001234567",
-              FirstName = "Mauri",
-              LastName = "Hernandez",
-              Balance = 5000
-            };
+            var userId = User.Identity.GetUserId();
+            var checkingAccount = db.CheckingAccounts.Where(c => c.ApplicationUserId == userId).FirstOrDefault();
             return View(checkingAccount);
+        }
+        
+        // GET: CheckingAccount/Details
+        [Authorize(Roles ="Admin")]
+        public ActionResult DetailsForAdmin(int id)
+        {
+            var checkingAccount = db.CheckingAccounts.Find(id);
+            return View("Details",checkingAccount);
+        }
+
+        public ActionResult List()
+        {
+            return View(db.CheckingAccounts.ToList());
         }
 
         // GET: CheckingAccount/Create
