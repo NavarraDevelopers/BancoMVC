@@ -26,6 +26,8 @@ namespace ProyectoX.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        public string Telephone { get; set; }
+
         public string Name
         {
             get
