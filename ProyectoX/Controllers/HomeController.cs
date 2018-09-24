@@ -40,6 +40,11 @@ namespace ProyectoX.Controllers
             return View();
         }
 
+        public ActionResult Foo()
+        {
+            return View("About");
+        }
+
         [HttpPost]
         public ActionResult Contact(string message)
         {
